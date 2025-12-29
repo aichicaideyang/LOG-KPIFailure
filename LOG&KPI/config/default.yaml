@@ -1,0 +1,46 @@
+# Metric-Only Anomaly Detection Configuration
+# =============================================
+
+dataset: metric_only_ad
+
+# Data paths
+path:
+    case_path: data/B榜题目.jsonl  # 异常时段信息
+    train_samples: data/train_samples.pkl
+    test_samples: data/test_samples.pkl
+
+# Feature dimensions (will be auto-detected from data)
+feat_dim:
+    metric: 7  # Number of feature channels
+
+# Training configuration
+train_samples_num: whole  # 'whole' or integer
+
+# Model parameters
+model_param:
+    instance_dim: 576     # Number of instances (auto-updated from data)
+    channel_dim: 7        # Number of feature channels (auto-updated from data)
+    
+    num_heads: 2          # Not used in current lightweight model
+    tf_layers: 1          # Not used in current lightweight model
+    
+    gru_hidden_dim: 32    # GRU hidden dimension
+    gru_layers: 1         # Number of GRU layers
+    
+    # Training parameters
+    epochs: 100
+    batch_size: 128       # Large batch for GPU
+    learning_rate: 0.001
+    dropout: 0.3
+
+# Anomaly detection parameters
+downstream_param:
+    AD:
+        split_ratio: 0.6      # Ratio for train/eval split
+        method: 'num'         # 'num' or 'prob'
+        t_value: 3            # Top-k instances for deviation
+        q: 0.1                # SPOT parameter
+        level: 0.90           # Threshold quantile level
+        delay: 600            # Merge delay in seconds
+        verbose: True
+
